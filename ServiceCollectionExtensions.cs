@@ -17,11 +17,11 @@ public static class ServiceCollectionExtensions
         if (assemblies is { Length: 0 } or null)
             assemblies = [Assembly.GetCallingAssembly()];
         
-        //Find CommandHandlers based on public, non abstract, classes that implements the ICommandHandler interface
+        //Find CommandHandlers based on public, non-abstract, classes that implements the ICommandHandler interface
         //Select the Input/Output arguments plus the handler itself
         var commandHandlers = assemblies
             .SelectMany(a => a.GetExportedTypes())
-            .Where(t => t is { IsPublic: true, IsClass: true, IsAbstract: false })
+            .Where(t => t is { IsClass: true, IsAbstract: false } && (t.IsPublic || t.IsNestedPublic))
             .Where(t => t.GetInterfaces()
                 .Where(i => i.IsGenericType)
                 .Any(i => i.GetGenericTypeDefinition() == typeof(ICommandHandler<,>)))
@@ -37,11 +37,11 @@ public static class ServiceCollectionExtensions
                 )
             )
             .ToArray();
-        //Find QueryHandlers based on public, non abstract, classes that implements the IQueryHandler interface
+        //Find QueryHandlers based on public, non-abstract, classes that implements the IQueryHandler interface
         //Select the Input/Output arguments plus the handler itself
         var queryHandlers = assemblies
             .SelectMany(a => a.GetExportedTypes())
-            .Where(t => t is { IsPublic: true, IsClass: true, IsAbstract: false })
+            .Where(t => t is { IsClass: true, IsAbstract: false } && (t.IsPublic || t.IsNestedPublic))
             .Where(t => t.GetInterfaces()
                 .Where(i => i.IsGenericType)
                 .Any(i => i.GetGenericTypeDefinition() == typeof(IQueryHandler<,>)))
