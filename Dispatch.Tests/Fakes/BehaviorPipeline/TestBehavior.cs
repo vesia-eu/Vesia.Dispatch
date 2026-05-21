@@ -1,0 +1,37 @@
+using Venly.Dispatch.Attributes;
+using Venly.Dispatch.Interfaces;
+using Venly.Dispatch.Interfaces.Behavior;
+using Venly.Dispatch.Interfaces.Messaging;
+using Venly.Dispatch.Tests.Fakes.Dispatcher;
+
+namespace Venly.Dispatch.Tests.Fakes.BehaviorPipeline;
+
+[Logged]
+public record TestAttributeLoggingQuery : IQuery<string>;
+
+public record TestAttributeNoLoggingQuery : IQuery<string>;
+
+public class TestAttributeLoggingHandler : IQueryHandler<TestAttributeLoggingQuery, string>
+{
+    public Task<string> Handle(TestAttributeLoggingQuery query, CancellationToken cancellationToken = default)
+        => Task.FromResult("logged!");
+}
+
+public class TestAttributeNoLoggingHandler : IQueryHandler<TestAttributeNoLoggingQuery, string>
+{
+    public Task<string> Handle(TestAttributeNoLoggingQuery query, CancellationToken cancellationToken = default)
+        => Task.FromResult("not logged!");
+}
+
+public class TrackingBehavior : ICommandPipelineBehavior<TestCommand, string>
+{
+    public static readonly List<string> ExecutionLog = new();
+
+    public async Task<string> Handle(TestCommand command, Func<Task<string>> next, CancellationToken cancellationToken = default)
+    {
+        ExecutionLog.Add("before");
+        var result = await next();
+        ExecutionLog.Add("after");
+        return result;
+    }
+}
