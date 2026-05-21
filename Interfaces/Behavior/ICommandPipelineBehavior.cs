@@ -8,8 +8,3 @@ public interface ICommandPipelineBehavior<in TCommand, TResult>
     Task<TResult> Handle(TCommand command, Func<Task<TResult>> next,
         CancellationToken cancellationToken = default);
 }
-
-public interface ICommandPipelineBehaviorWrapper<TResult>
-{
-    Task<TResult> Handle(object command, Func<Task<TResult>> next, CancellationToken cancellationToken);
-}

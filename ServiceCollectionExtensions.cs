@@ -1,5 +1,4 @@
 using System.Reflection;
-using Venly.Dispatch.Extensions;
 using Venly.Dispatch.Interfaces;
 using Venly.Dispatch.Services;
 using Microsoft.Extensions.DependencyInjection;
@@ -75,59 +74,43 @@ public static class ServiceCollectionExtensions
 
             services.AddScoped(genericType, command.Handler);
             
-            var interfaceWrapper= typeof(ICommandHandlerWrapper<>)
-                .MakeGenericType(command.ResultArgument);
+            // register behavior wrapper if logging enabled
+            if (options.CommandLogging == LoggingMode.Disabled) continue;
+            var behaviorType = options.CommandLogging == LoggingMode.All
+                ? typeof(CommandLoggingBehavior<,>)
+                : typeof(CommandOptInLoggingBehavior<,>);
             
-            var wrapper = typeof(CommandHandlerWrapper<,>)
+            var behaviorInterface = typeof(ICommandPipelineBehavior<,>)
+                .MakeGenericType(command.InputArgument, command.ResultArgument);
+            var closedBehavior = behaviorType
                 .MakeGenericType(command.InputArgument, command.ResultArgument);
             
-            services.AddScoped(interfaceWrapper, wrapper);
+            services.AddScoped(behaviorInterface, closedBehavior);
         }
         
         //Register Queries + QueryWrappers as scoped
         foreach (var query in queryHandlers)
         {
+            // existing handler registration
             var genericType = typeof(IQueryHandler<,>)
                 .MakeGenericType(query.InputArgument, query.ResultArgument);
-
             services.AddScoped(genericType, query.Handler);
-            
-            var interfaceWrapper= typeof(IQueryHandlerWrapper<>)
-                .MakeGenericType(query.ResultArgument);
-            
-            var wrapper = typeof(QueryHandlerWrapper<,>)
+
+            // register behavior wrapper if logging enabled
+            if (options.QueryLogging == LoggingMode.Disabled) continue;
+            var behaviorType = options.QueryLogging == LoggingMode.All
+                ? typeof(QueryLoggingBehavior<,>)
+                : typeof(QueryOptInLoggingBehavior<,>);
+
+            var behaviorInterface = typeof(IQueryPipelineBehavior<,>)
                 .MakeGenericType(query.InputArgument, query.ResultArgument);
-            
-            services.AddScoped(interfaceWrapper, wrapper);
+            var closedBehavior = behaviorType
+                .MakeGenericType(query.InputArgument, query.ResultArgument);
+
+            services.AddScoped(behaviorInterface, closedBehavior);
         }
         
-        //Register Behaviors
         
-        
-        //Register Logging Behaviors
-        switch (options.CommandLogging)
-        {
-            case LoggingMode.All:
-                services.AddScoped(typeof(ICommandPipelineBehavior<,>), typeof(CommandLoggingBehavior<,>));
-                break;
-            case LoggingMode.OptIn:
-                // register a behavior that checks for [Logged] attribute
-                break;
-            case LoggingMode.Disabled:
-                break;
-        }
-        
-        switch (options.QueryLogging)
-        {
-            case LoggingMode.All:
-                services.AddScoped(typeof(IQueryPipelineBehavior<,>), typeof(QueryLoggingBehavior<,>));
-                break;
-            case LoggingMode.OptIn:
-                // register a behavior that checks for [Logged] attribute
-                break;
-            case LoggingMode.Disabled:
-                break;
-        }
         
         return services;
     }
@@ -141,18 +124,9 @@ public static class ServiceCollectionExtensions
             .FirstOrDefault(i => i.IsGenericType && 
                                  i.GetGenericTypeDefinition() == typeof(ICommandPipelineBehavior<,>))
         ?? throw new InvalidOperationException($"{typeof(TBehavior).Name} does not implement ICommandPipelineBehavior<,>");
-
-        var args = behaviorInterface.GetGenericArguments();
-        var inputArgument = args[0];
-        var resultArgument = args[1];
-
+        
         // register behavior
         services.AddScoped(behaviorInterface, typeof(TBehavior));
-
-        // register wrapper
-        var wrapperInterface = typeof(ICommandPipelineBehaviorWrapper<>).MakeGenericType(resultArgument);
-        var wrapper = typeof(CommandPipelineBehaviorWrapper<,>).MakeGenericType(inputArgument, resultArgument);
-        services.AddScoped(wrapperInterface, wrapper);
 
         return services;
     }
@@ -167,17 +141,8 @@ public static class ServiceCollectionExtensions
                                  i.GetGenericTypeDefinition() == typeof(IQueryPipelineBehavior<,>)) 
                                 ?? throw new InvalidOperationException($"{typeof(TBehavior).Name} does not implement IQueryPipelineBehavior<,>");
 
-        var args = behaviorInterface.GetGenericArguments();
-        var inputArgument = args[0];
-        var resultArgument = args[1];
-
         // register behavior
         services.AddScoped(behaviorInterface, typeof(TBehavior));
-
-        // register wrapper
-        var wrapperInterface = typeof(IQueryPipelineBehaviorWrapper<>).MakeGenericType(resultArgument);
-        var wrapper = typeof(QueryPipelineBehaviorWrapper<,>).MakeGenericType(inputArgument, resultArgument);
-        services.AddScoped(wrapperInterface, wrapper);
 
         return services;
     }

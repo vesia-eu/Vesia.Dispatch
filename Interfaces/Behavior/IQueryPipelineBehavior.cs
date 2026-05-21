@@ -9,9 +9,3 @@ public interface IQueryPipelineBehavior<in TQuery, TResult>
     Task<TResult> Handle(TQuery query, Func<Task<TResult>> next,
         CancellationToken cancellationToken = default);
 }
-
-
-public interface IQueryPipelineBehaviorWrapper<TResult>
-{
-    Task<TResult> Handle(object query, Func<Task<TResult>> next, CancellationToken cancellationToken = default);
-}
