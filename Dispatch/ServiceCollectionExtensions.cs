@@ -11,6 +11,7 @@ namespace Venly.Dispatch;
 public static class ServiceCollectionExtensions
 {
     private record HandlerTypes(Type InputArgument, Type ResultArgument, Type Handler);
+    private record NotificationTypes(Type InputArgument, Type Handler);
     
     public static IServiceCollection AddDispatch(
         this IServiceCollection services,
@@ -65,8 +66,28 @@ public static class ServiceCollectionExtensions
                 )
             )
             .ToArray();
+        
+        //Find NotificationHandlers based on public, non-abstract, classes that implements the INotification interface
+        //Select the Input arguments plus the handler itself
+        var notificationHandlers = assemblies
+            .SelectMany(a => a.GetExportedTypes())
+            .Where(t => t is { IsClass: true, IsAbstract: false } && (t.IsPublic || t.IsNestedPublic))
+            .Where(t => t.GetInterfaces()
+                .Where(i => i.IsGenericType)
+                .Any(i => i.GetGenericTypeDefinition() == typeof(INotificationHandler<>)))
+            .SelectMany(handler => handler.GetInterfaces()
+                .Where(handlerInterface => 
+                    handlerInterface.IsGenericType
+                    && handlerInterface.GetGenericTypeDefinition() == typeof(INotificationHandler<>))
+                .Select(handlerInterface => new NotificationTypes(
+                        InputArgument: handlerInterface.GetGenericArguments()[0],
+                        Handler: handler
+                    )
+                )
+            )
+            .ToArray();
 
-        //Register Commands + CommandWrappers as scoped
+        //Register Commands as scoped
         foreach (var command in commandHandlers)
         {
             var genericType = typeof(ICommandHandler<,>)
@@ -88,7 +109,7 @@ public static class ServiceCollectionExtensions
             services.AddScoped(behaviorInterface, closedBehavior);
         }
         
-        //Register Queries + QueryWrappers as scoped
+        //Register Queries as scoped
         foreach (var query in queryHandlers)
         {
             // existing handler registration
@@ -110,7 +131,15 @@ public static class ServiceCollectionExtensions
             services.AddScoped(behaviorInterface, closedBehavior);
         }
         
-        
+        //Register Notifications as scoped
+        foreach (var notification in notificationHandlers)
+        {
+            // existing handler registration
+            var genericType = typeof(INotificationHandler<>)
+                .MakeGenericType(notification.InputArgument);
+            
+            services.AddScoped(genericType, notification.Handler);
+        }
         
         return services;
     }
