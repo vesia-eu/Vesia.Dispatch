@@ -1,3 +1,4 @@
+using System.Reflection.Metadata;
 using Venly.Dispatch.Interfaces;
 using Venly.Dispatch.Interfaces.Messaging;
 using Microsoft.Extensions.DependencyInjection;
@@ -58,5 +59,18 @@ public class Dispatcher(IServiceProvider serviceProvider) : IDispatcher
         }
 
         return await next();
+    }
+
+    public async Task PublishAsync(INotification notification, CancellationToken cancellationToken = default)
+    {
+        var handlerType = typeof(INotificationHandler<>)
+            .MakeGenericType(notification.GetType());
+
+        var handlers = serviceProvider.GetServices(handlerType);
+
+        foreach (var handler in handlers)
+        {
+            await ((dynamic)handler!).Handle((dynamic)notification, cancellationToken);
+        }
     }
 }
