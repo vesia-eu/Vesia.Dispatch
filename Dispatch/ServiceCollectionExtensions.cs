@@ -4,7 +4,6 @@ using Vesia.Dispatch.PipelineBehaviors;
 using Vesia.Dispatch.Enums;
 using Vesia.Dispatch.Interfaces;
 using Vesia.Dispatch.Interfaces.Behavior;
-using Vesia.Dispatch.PipelineBehaviors;
 using Vesia.Dispatch.Services;
 
 namespace Vesia.Dispatch;
