@@ -5,10 +5,12 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
-    <PackageId>Venly.Dispatch.Tests</PackageId>
-    <Authors>Venly</Authors>
-    <AssemblyName>Venly.Dispatch.Tests</AssemblyName>
-    <RootNamespace>Venly.Dispatch.Tests</RootNamespace>
+    <PackageId>Vesia.Dispatch.Tests</PackageId>
+    <Authors>Vesia</Authors>
+    <AssemblyName>Vesia.Dispatch.Tests</AssemblyName>
+    <RootNamespace>Vesia.Dispatch.Tests</RootNamespace>
+    <Company>Vesia</Company>
+    <Product>Vesia.Dispatch.Tests</Product>
   </PropertyGroup>
 
   <ItemGroup>

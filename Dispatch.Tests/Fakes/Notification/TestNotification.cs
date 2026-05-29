@@ -1,7 +1,6 @@
-using Venly.Dispatch.Interfaces;
-using Venly.Dispatch.Interfaces.Messaging;
+using Vesia.Dispatch.Interfaces;
 
-namespace Venly.Dispatch.Tests.Fakes.Notification;
+namespace Vesia.Dispatch.Tests.Fakes.Notification;
 
 public record TestNotification;
 

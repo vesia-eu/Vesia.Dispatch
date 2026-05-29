@@ -4,20 +4,21 @@
         <TargetFramework>net10.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <AssemblyName>Venly.Dispatch</AssemblyName>
-        <RootNamespace>Venly.Dispatch</RootNamespace>
+        <AssemblyName>Vesia.Dispatch</AssemblyName>
+        <RootNamespace>Vesia.Dispatch</RootNamespace>
         
         <!-- NuGet metadata -->
-        <PackageId>Venly.Dispatch</PackageId>
+        <PackageId>Vesia.Dispatch</PackageId>
         <Version>0.1.0</Version>
         <Authors>Oliver Rasmussen</Authors>
         <Description>A free, open-source CQRS dispatcher for .NET with built-in command/query separation, pipeline behaviors, and notifications.</Description>
         <PackageTags>cqrs;mediator;dispatcher;clean-architecture;ddd</PackageTags>
-        <PackageProjectUrl>https://github.com/venly-eu/Venly.Dispatch</PackageProjectUrl>
-        <RepositoryUrl>https://github.com/venly-eu/Venly.Dispatch</RepositoryUrl>
+        <PackageProjectUrl>https://github.com/vesia-eu/Vesia.Dispatch</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/Vesia-eu/Vesia.Dispatch</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PackageReadmeFile>README.md</PackageReadmeFile>
+        <Product>Vesia.Dispatch</Product>
     </PropertyGroup>
 
     <ItemGroup>

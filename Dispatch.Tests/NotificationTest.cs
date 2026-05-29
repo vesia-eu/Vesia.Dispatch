@@ -1,8 +1,8 @@
 using Microsoft.Extensions.DependencyInjection;
-using Venly.Dispatch.Interfaces;
-using Venly.Dispatch.Tests.Fakes.Notification;
+using Vesia.Dispatch.Interfaces;
+using Vesia.Dispatch.Tests.Fakes.Notification;
 
-namespace Venly.Dispatch.Tests;
+namespace Vesia.Dispatch.Tests;
 
 public class NotificationTest
 {

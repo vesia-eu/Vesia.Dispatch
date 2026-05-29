@@ -1,10 +1,10 @@
 using System.Reflection;
 using Microsoft.Extensions.Logging;
-using Venly.Dispatch.Attributes;
-using Venly.Dispatch.Interfaces.Behavior;
-using Venly.Dispatch.Interfaces.Messaging;
+using Vesia.Dispatch.Attributes;
+using Vesia.Dispatch.Interfaces.Behavior;
+using Vesia.Dispatch.Interfaces.Messaging;
 
-namespace Venly.Dispatch.PipelineBehaviors;
+namespace Vesia.Dispatch.PipelineBehaviors;
 
 public class CommandOptInLoggingBehavior<TCommand, TResult>(ILogger<CommandOptInLoggingBehavior<TCommand, TResult>> logger)
     : ICommandPipelineBehavior<TCommand, TResult>

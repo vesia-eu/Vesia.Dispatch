@@ -1,8 +1,8 @@
 using Microsoft.Extensions.Logging;
-using Venly.Dispatch.Interfaces.Behavior;
-using Venly.Dispatch.Interfaces.Messaging;
+using Vesia.Dispatch.Interfaces.Behavior;
+using Vesia.Dispatch.Interfaces.Messaging;
 
-namespace Venly.Dispatch.PipelineBehaviors;
+namespace Vesia.Dispatch.PipelineBehaviors;
 
 public class QueryLoggingBehavior<TQuery, TResult>(ILogger<QueryLoggingBehavior<TQuery, TResult>> logger)
     : IQueryPipelineBehavior<TQuery, TResult>

@@ -1,6 +1,6 @@
-using Venly.Dispatch.Interfaces.Messaging;
+using Vesia.Dispatch.Interfaces.Messaging;
 
-namespace Venly.Dispatch.Interfaces.Behavior;
+namespace Vesia.Dispatch.Interfaces.Behavior;
 
 public interface ICommandPipelineBehavior<in TCommand, TResult>
     where TCommand : ICommand<TResult>

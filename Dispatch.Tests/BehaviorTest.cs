@@ -1,12 +1,12 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Testing;
-using Venly.Dispatch.Enums;
-using Venly.Dispatch.Interfaces;
-using Venly.Dispatch.PipelineBehaviors;
-using Venly.Dispatch.Tests.Fakes.BehaviorPipeline;
+using Vesia.Dispatch.Enums;
+using Vesia.Dispatch.Interfaces;
+using Vesia.Dispatch.PipelineBehaviors;
+using Vesia.Dispatch.Tests.Fakes.BehaviorPipeline;
 
-namespace Venly.Dispatch.Tests;
+namespace Vesia.Dispatch.Tests;
 
 public class BehaviorTest
 {

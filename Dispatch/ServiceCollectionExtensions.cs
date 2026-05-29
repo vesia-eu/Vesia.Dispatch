@@ -1,12 +1,13 @@
 using System.Reflection;
-using Venly.Dispatch.Interfaces;
-using Venly.Dispatch.Services;
 using Microsoft.Extensions.DependencyInjection;
-using Venly.Dispatch.Enums;
-using Venly.Dispatch.Interfaces.Behavior;
-using Venly.Dispatch.PipelineBehaviors;
+using Vesia.Dispatch.PipelineBehaviors;
+using Vesia.Dispatch.Enums;
+using Vesia.Dispatch.Interfaces;
+using Vesia.Dispatch.Interfaces.Behavior;
+using Vesia.Dispatch.PipelineBehaviors;
+using Vesia.Dispatch.Services;
 
-namespace Venly.Dispatch;
+namespace Vesia.Dispatch;
 
 public static class ServiceCollectionExtensions
 {

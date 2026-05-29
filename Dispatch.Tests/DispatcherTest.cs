@@ -1,9 +1,9 @@
 using Microsoft.Extensions.DependencyInjection;
-using Venly.Dispatch.Exceptions;
-using Venly.Dispatch.Interfaces;
-using Venly.Dispatch.Tests.Fakes.Dispatcher;
+using Vesia.Dispatch.Exceptions;
+using Vesia.Dispatch.Interfaces;
+using Vesia.Dispatch.Tests.Fakes.Dispatcher;
 
-namespace Venly.Dispatch.Tests;
+namespace Vesia.Dispatch.Tests;
 
 public class DispatcherTest
 {

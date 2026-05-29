@@ -1,4 +1,4 @@
-namespace Venly.Dispatch.Interfaces.Messaging;
+namespace Vesia.Dispatch.Interfaces.Messaging;
 
 public interface IQuery<TResult> { }
 

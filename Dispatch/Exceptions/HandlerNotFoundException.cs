@@ -1,4 +1,4 @@
-namespace Venly.Dispatch.Exceptions;
+namespace Vesia.Dispatch.Exceptions;
 
 public class HandlerNotFoundException : Exception
 {

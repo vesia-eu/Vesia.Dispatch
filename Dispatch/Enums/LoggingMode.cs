@@ -1,4 +1,4 @@
-namespace Venly.Dispatch.Enums;
+namespace Vesia.Dispatch.Enums;
 
 public enum LoggingMode
 {

@@ -1,10 +1,10 @@
-using Venly.Dispatch.Attributes;
-using Venly.Dispatch.Interfaces;
-using Venly.Dispatch.Interfaces.Behavior;
-using Venly.Dispatch.Interfaces.Messaging;
-using Venly.Dispatch.Tests.Fakes.Dispatcher;
+using Vesia.Dispatch.Attributes;
+using Vesia.Dispatch.Interfaces;
+using Vesia.Dispatch.Interfaces.Behavior;
+using Vesia.Dispatch.Interfaces.Messaging;
+using Vesia.Dispatch.Tests.Fakes.Dispatcher;
 
-namespace Venly.Dispatch.Tests.Fakes.BehaviorPipeline;
+namespace Vesia.Dispatch.Tests.Fakes.BehaviorPipeline;
 
 [Logged]
 public record TestAttributeLoggingQuery : IQuery<string>;

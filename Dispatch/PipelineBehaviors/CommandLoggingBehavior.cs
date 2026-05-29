@@ -1,8 +1,8 @@
 using Microsoft.Extensions.Logging;
-using Venly.Dispatch.Interfaces.Behavior;
-using Venly.Dispatch.Interfaces.Messaging;
+using Vesia.Dispatch.Interfaces.Behavior;
+using Vesia.Dispatch.Interfaces.Messaging;
 
-namespace Venly.Dispatch.PipelineBehaviors;
+namespace Vesia.Dispatch.PipelineBehaviors;
 
 public class CommandLoggingBehavior<TCommand, TResult>(ILogger<CommandLoggingBehavior<TCommand, TResult>> logger)
     : ICommandPipelineBehavior<TCommand, TResult>

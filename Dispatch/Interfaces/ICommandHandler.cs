@@ -1,4 +1,4 @@
-namespace Venly.Dispatch.Interfaces;
+namespace Vesia.Dispatch.Interfaces;
 
 public interface ICommandHandler<in TCommand, TResult> : IHandler
 {

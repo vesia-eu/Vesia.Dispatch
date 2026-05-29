@@ -1,4 +1,4 @@
-namespace Venly.Dispatch.Interfaces;
+namespace Vesia.Dispatch.Interfaces;
 
 public interface INotificationHandler<in TNotification>
 {

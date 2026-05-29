@@ -1,4 +1,4 @@
-namespace Venly.Dispatch.Attributes;
+namespace Vesia.Dispatch.Attributes;
 
 [AttributeUsage(AttributeTargets.Class)]
 public class LoggedAttribute : Attribute { }

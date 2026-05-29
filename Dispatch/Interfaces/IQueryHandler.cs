@@ -1,4 +1,4 @@
-namespace Venly.Dispatch.Interfaces;
+namespace Vesia.Dispatch.Interfaces;
 
 public interface IQueryHandler<in TQuery, TResult> : IHandler
 {

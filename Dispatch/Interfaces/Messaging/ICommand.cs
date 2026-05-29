@@ -1,3 +1,3 @@
-namespace Venly.Dispatch.Interfaces.Messaging;
+namespace Vesia.Dispatch.Interfaces.Messaging;
 
 public interface ICommand<TResult> { }

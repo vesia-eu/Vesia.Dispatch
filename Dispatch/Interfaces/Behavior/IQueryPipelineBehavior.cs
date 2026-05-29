@@ -1,7 +1,6 @@
-using Venly.Dispatch.Interfaces.Messaging;
+using Vesia.Dispatch.Interfaces.Messaging;
 
-namespace Venly.Dispatch.Interfaces.Behavior;
-
+namespace Vesia.Dispatch.Interfaces.Behavior;
 
 public interface IQueryPipelineBehavior<in TQuery, TResult>
     where TQuery : IQuery<TResult>

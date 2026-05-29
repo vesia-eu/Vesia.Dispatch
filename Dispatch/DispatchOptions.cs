@@ -1,6 +1,6 @@
-using Venly.Dispatch.Enums;
+using Vesia.Dispatch.Enums;
 
-namespace Venly.Dispatch;
+namespace Vesia.Dispatch;
 
 public class DispatchOptions
 {

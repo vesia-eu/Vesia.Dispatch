@@ -1,7 +1,7 @@
-using Venly.Dispatch.Interfaces;
-using Venly.Dispatch.Interfaces.Messaging;
+using Vesia.Dispatch.Interfaces;
+using Vesia.Dispatch.Interfaces.Messaging;
 
-namespace Venly.Dispatch.Tests.Fakes.Dispatcher;
+namespace Vesia.Dispatch.Tests.Fakes.Dispatcher;
 
 public record TestCommand : ICommand<string>;
 

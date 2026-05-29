@@ -1,5 +1,5 @@
-using Venly.Dispatch.Interfaces.Messaging;
+using Vesia.Dispatch.Interfaces.Messaging;
 
-namespace Venly.Dispatch.Tests.Fakes.Dispatcher;
+namespace Vesia.Dispatch.Tests.Fakes.Dispatcher;
 
 public record TestQueryWithoutHandler : IQuery<string>;

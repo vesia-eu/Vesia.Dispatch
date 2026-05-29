@@ -1,11 +1,11 @@
-# What is Venly.Dispatch?
-Venly.Dispatch is a free, open-source alternative to MediatR built for CQRS patterns and Clean Architecture.
+# What is Vesia.Dispatch?
+Vesia.Dispatch is a free, open-source alternative to MediatR built for CQRS patterns and Clean Architecture.
 
 There are 3 types that can be dispatched — Commands, Queries, and Notifications.
 
 Logging is built in and flexible. You can log all commands and queries, disable logging entirely, or use Opt-In mode to only log types marked with `[Logged]`. Commands and queries are configured independently.
 
-Venly.Dispatch uses the standard `Microsoft.Extensions.Logging` abstraction — plug in any logging provider you prefer (Serilog, NLog, etc.) and it works automatically.
+Vesia.Dispatch uses the standard `Microsoft.Extensions.Logging` abstraction — plug in any logging provider you prefer (Serilog, NLog, etc.) and it works automatically.
 
 
 # The types
@@ -20,7 +20,7 @@ Venly.Dispatch uses the standard `Microsoft.Extensions.Logging` abstraction — 
 
 ## Installation
 ```bash
-dotnet add package Venly.Dispatch
+dotnet add package Vesia.Dispatch
 ```
 
 ### Setup

@@ -1,6 +1,6 @@
-using Venly.Dispatch.Interfaces.Messaging;
+using Vesia.Dispatch.Interfaces.Messaging;
 
-namespace Venly.Dispatch.Interfaces;
+namespace Vesia.Dispatch.Interfaces;
 
 public interface IDispatcher
 {

@@ -1,10 +1,10 @@
-using Venly.Dispatch.Interfaces;
-using Venly.Dispatch.Interfaces.Messaging;
 using Microsoft.Extensions.DependencyInjection;
-using Venly.Dispatch.Exceptions;
-using Venly.Dispatch.Interfaces.Behavior;
+using Vesia.Dispatch.Exceptions;
+using Vesia.Dispatch.Interfaces;
+using Vesia.Dispatch.Interfaces.Behavior;
+using Vesia.Dispatch.Interfaces.Messaging;
 
-namespace Venly.Dispatch.Services;
+namespace Vesia.Dispatch.Services;
 
 public class Dispatcher(IServiceProvider serviceProvider) : IDispatcher
 {
