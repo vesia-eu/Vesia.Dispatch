@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Reflection;
 using Microsoft.Extensions.Logging;
 
@@ -11,20 +12,24 @@ internal sealed class QueryOptInLoggingBehavior<TQuery, TResult>(ILogger<QueryOp
     {
         var shouldLog = typeof(TQuery).GetCustomAttribute<LoggedAttribute>() is not null;
 
+        var sw = Stopwatch.StartNew();
         try
         {
             if (shouldLog) 
                 logger.LogInformation("Handling query {Query}", typeof(TQuery).Name);
         
+            sw.Stop();
             var result = await next();
         
             if (shouldLog) 
-                logger.LogInformation("Handled query {Query}", typeof(TQuery).Name);
+                logger.LogInformation("Handled query {Query} in {Elapsed}ms", typeof(TQuery).Name, sw.ElapsedMilliseconds);
+            
             return result;
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Error handling query {Query}", typeof(TQuery).Name);
+            sw.Stop();
+            logger.LogError(ex, "Error handling query {Query} after {Elapsed}ms", typeof(TQuery).Name, sw.ElapsedMilliseconds);
             throw;
         }
     }
