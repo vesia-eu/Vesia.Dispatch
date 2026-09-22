@@ -10,16 +10,16 @@ namespace Vesia.Dispatch;
 /// </summary>
 public static class ServiceCollectionExtensions
 {
-    internal static readonly ConcurrentDictionary<Type, Type> NotificationHandlerTypeCache = new();
+    internal static readonly ConcurrentDictionary<Type, Type> _notificationHandlerTypeCache = new();
     
-    internal static readonly ConcurrentDictionary<(Type Command, Type Result), Type> CommandHandlerTypeCache = new();
-    internal static readonly ConcurrentDictionary<(Type Command, Type Result), Type> CommandBehaviorTypeCache = new();
+    internal static readonly ConcurrentDictionary<(Type Command, Type Result), Type> _commandHandlerTypeCache = new();
+    internal static readonly ConcurrentDictionary<(Type Command, Type Result), Type> _commandBehaviorTypeCache = new();
     
-    internal static readonly ConcurrentDictionary<(Type Query, Type Result), Type> QueryHandlerTypeCache = new();
-    internal static readonly ConcurrentDictionary<(Type Query, Type Result), Type> QueryBehaviorTypeCache = new();
+    internal static readonly ConcurrentDictionary<(Type Query, Type Result), Type> _queryHandlerTypeCache = new();
+    internal static readonly ConcurrentDictionary<(Type Query, Type Result), Type> _queryBehaviorTypeCache = new();
 
-    internal static readonly ConcurrentDictionary<Type, Type> VoidHandlerTypeCache = new();
-    internal static readonly ConcurrentDictionary<Type, Type> VoidBehaviorTypeCache = new();
+    internal static readonly ConcurrentDictionary<Type, Type> _voidHandlerTypeCache = new();
+    internal static readonly ConcurrentDictionary<Type, Type> _voidBehaviorTypeCache = new();
     
     private record HandlerTypes(Type InputArgument, Type ResultArgument, Type Handler);
     private record VoidHandlerTypes(Type InputArgument, Type Handler);
@@ -145,7 +145,7 @@ public static class ServiceCollectionExtensions
                 services.AddScoped(handlerInterface, command.Handler);
 
                 // Cache the closed handler interface type, keyed by (command, result) — this is what Dispatcher looks up.
-                CommandHandlerTypeCache.TryAdd((command.InputArgument, command.ResultArgument), handlerInterface);
+                _commandHandlerTypeCache.TryAdd((command.InputArgument, command.ResultArgument), handlerInterface);
 
                 // Register behavior wrapper if logging enabled
                 if (options.CommandLogging == LoggingMode.Disabled) continue;
@@ -162,7 +162,7 @@ public static class ServiceCollectionExtensions
                 services.AddScoped(behaviorInterface, behaviorService);
 
                 // Cache the pipeline behavior interface type too — same lookup pattern in Dispatcher.
-                CommandBehaviorTypeCache.TryAdd((command.InputArgument, command.ResultArgument), behaviorInterface);
+                _commandBehaviorTypeCache.TryAdd((command.InputArgument, command.ResultArgument), behaviorInterface);
             }
             
             // Register void Commands as scoped
@@ -175,7 +175,7 @@ public static class ServiceCollectionExtensions
                 services.AddScoped(handlerInterface, command.Handler);
     
                 // Cache the closed handler interface type, keyed by command type (void commands have no result type).
-                VoidHandlerTypeCache.TryAdd(command.InputArgument, handlerInterface);
+                _voidHandlerTypeCache.TryAdd(command.InputArgument, handlerInterface);
     
                 // Register behavior wrapper if logging enabled - if 'disabled' skip the steps below.
                 if (options.CommandLogging == LoggingMode.Disabled) continue;
@@ -191,7 +191,7 @@ public static class ServiceCollectionExtensions
                 services.AddScoped(behaviorInterface, behaviorService);
     
                 // Cache the pipeline behavior interface type too — same lookup pattern in Dispatcher.
-                VoidBehaviorTypeCache.TryAdd(command.InputArgument, behaviorInterface);
+                _voidBehaviorTypeCache.TryAdd(command.InputArgument, behaviorInterface);
             }
             
             // Register Queries as scoped
@@ -203,7 +203,7 @@ public static class ServiceCollectionExtensions
                 
                 services.AddScoped(handlerInterface, query.Handler);
                 
-                QueryHandlerTypeCache.TryAdd((query.InputArgument, query.ResultArgument), handlerInterface);
+                _queryHandlerTypeCache.TryAdd((query.InputArgument, query.ResultArgument), handlerInterface);
     
                 // Register behavior wrapper if logging enabled - if 'disabled' skip the steps below.
                 if (options.QueryLogging == LoggingMode.Disabled) continue;
@@ -219,7 +219,7 @@ public static class ServiceCollectionExtensions
                 services.AddScoped(behaviorInterface, behaviorService);
                 
                 // Cache the pipeline behavior interface type too — same lookup pattern in Dispatcher.
-                QueryBehaviorTypeCache.TryAdd((query.InputArgument, query.ResultArgument), behaviorInterface);
+                _queryBehaviorTypeCache.TryAdd((query.InputArgument, query.ResultArgument), behaviorInterface);
             }
             
             // Register Notifications as scoped
@@ -231,7 +231,7 @@ public static class ServiceCollectionExtensions
     
                 services.AddScoped(handlerInterface, notification.Handler);
     
-                NotificationHandlerTypeCache.TryAdd(notification.InputArgument, handlerInterface);
+                _notificationHandlerTypeCache.TryAdd(notification.InputArgument, handlerInterface);
             }
             
             return services;
@@ -253,17 +253,17 @@ public static class ServiceCollectionExtensions
             where TBehavior : class
         {
             var behaviorInterface = typeof(TBehavior)
-                                        .GetInterfaces()
-                                        .FirstOrDefault(i => i.IsGenericType && 
-                                                             i.GetGenericTypeDefinition() == typeof(ICommandPipelineBehavior<,>))
-                                    ?? throw new InvalidOperationException($"{typeof(TBehavior).Name} does not implement ICommandPipelineBehavior<,>");
-    
+                .GetInterfaces()
+                .FirstOrDefault(i =>
+                    i.IsGenericType && i.GetGenericTypeDefinition() == typeof(ICommandPipelineBehavior<,>))
+            ?? throw new InvalidOperationException($"{typeof(TBehavior).Name} does not implement ICommandPipelineBehavior<,>");
+
             // Register behavior
             services.AddScoped(behaviorInterface, typeof(TBehavior));
 
             // Cache the closed behavior interface type, keyed by (command, result) args from the resolved interface.
             var genericArgs = behaviorInterface.GetGenericArguments();
-            CommandBehaviorTypeCache.TryAdd((genericArgs[0], genericArgs[1]), behaviorInterface);
+            _commandBehaviorTypeCache.TryAdd((genericArgs[0], genericArgs[1]), behaviorInterface);
 
             return services;
         }
@@ -284,16 +284,16 @@ public static class ServiceCollectionExtensions
             where TBehavior : class
         {
             var behaviorInterface = typeof(TBehavior)
-                                        .GetInterfaces()
-                                        .FirstOrDefault(i => i.IsGenericType && 
-                                                             i.GetGenericTypeDefinition() == typeof(IQueryPipelineBehavior<,>)) 
-                                    ?? throw new InvalidOperationException($"{typeof(TBehavior).Name} does not implement IQueryPipelineBehavior<,>");
+                .GetInterfaces()
+                .FirstOrDefault(i =>
+                    i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IQueryPipelineBehavior<,>)) 
+            ?? throw new InvalidOperationException($"{typeof(TBehavior).Name} does not implement IQueryPipelineBehavior<,>");
             // Register behavior
             services.AddScoped(behaviorInterface, typeof(TBehavior));
 
             // Cache the closed behavior interface type, keyed by (query, result) args from the resolved interface.
             var genericArgs = behaviorInterface.GetGenericArguments();
-            QueryBehaviorTypeCache.TryAdd((genericArgs[0], genericArgs[1]), behaviorInterface);
+            _queryBehaviorTypeCache.TryAdd((genericArgs[0], genericArgs[1]), behaviorInterface);
 
             return services;
         }

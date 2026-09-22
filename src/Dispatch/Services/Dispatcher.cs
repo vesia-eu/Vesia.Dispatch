@@ -8,7 +8,7 @@ internal sealed class Dispatcher(IServiceProvider serviceProvider) : IDispatcher
     public async Task<TResult> DispatchAsync<TResult>
         (ICommand<TResult> command, CancellationToken cancellationToken = default)
     {
-        var handlerType = ServiceCollectionExtensions.CommandHandlerTypeCache.GetOrAdd(
+        var handlerType = ServiceCollectionExtensions._commandHandlerTypeCache.GetOrAdd(
             (command.GetType(), typeof(TResult)),
             static key => typeof(ICommandHandler<,>).MakeGenericType(key.Command, key.Result));
         
@@ -16,7 +16,7 @@ internal sealed class Dispatcher(IServiceProvider serviceProvider) : IDispatcher
                           ?? throw new HandlerNotFoundException(command.GetType().Name);
 
         // resolve behaviors
-        var behaviorType = ServiceCollectionExtensions.CommandBehaviorTypeCache.GetOrAdd(
+        var behaviorType = ServiceCollectionExtensions._commandBehaviorTypeCache.GetOrAdd(
             (command.GetType(), typeof(TResult)),
             static key => typeof(ICommandPipelineBehavior<,>).MakeGenericType(key.Command, key.Result));
         var behaviors = serviceProvider.GetServices(behaviorType);
@@ -37,7 +37,7 @@ internal sealed class Dispatcher(IServiceProvider serviceProvider) : IDispatcher
     public async Task DispatchAsync
         (ICommand command, CancellationToken cancellationToken = default)
     {
-        var handlerType = ServiceCollectionExtensions.VoidHandlerTypeCache.GetOrAdd(
+        var handlerType = ServiceCollectionExtensions._voidHandlerTypeCache.GetOrAdd(
             command.GetType(),
             static ct => typeof(ICommandHandler<>).MakeGenericType(ct));
     
@@ -45,7 +45,7 @@ internal sealed class Dispatcher(IServiceProvider serviceProvider) : IDispatcher
                           ?? throw new HandlerNotFoundException(command.GetType().Name);
 
         // resolve behaviors
-        var behaviorType = ServiceCollectionExtensions.VoidBehaviorTypeCache.GetOrAdd(
+        var behaviorType = ServiceCollectionExtensions._voidBehaviorTypeCache.GetOrAdd(
             command.GetType(),
             static ct => typeof(ICommandPipelineBehavior<>).MakeGenericType(ct));
         var behaviors = serviceProvider.GetServices(behaviorType);
@@ -66,7 +66,7 @@ internal sealed class Dispatcher(IServiceProvider serviceProvider) : IDispatcher
     public async Task<TResult> DispatchAsync<TResult>
         (IQuery<TResult> query, CancellationToken cancellationToken = default)
     {
-        var handlerType = ServiceCollectionExtensions.QueryHandlerTypeCache.GetOrAdd(
+        var handlerType = ServiceCollectionExtensions._queryHandlerTypeCache.GetOrAdd(
             (query.GetType(), typeof(TResult)),
             static key => typeof(IQueryHandler<,>).MakeGenericType(key.Query, key.Result));
     
@@ -74,7 +74,7 @@ internal sealed class Dispatcher(IServiceProvider serviceProvider) : IDispatcher
                           ?? throw new HandlerNotFoundException(query.GetType().Name);
 
         // resolve behaviors
-        var behaviorType = ServiceCollectionExtensions.QueryBehaviorTypeCache.GetOrAdd(
+        var behaviorType = ServiceCollectionExtensions._queryBehaviorTypeCache.GetOrAdd(
             (query.GetType(), typeof(TResult)),
             static key => typeof(IQueryPipelineBehavior<,>).MakeGenericType(key.Query, key.Result));
         var behaviors = serviceProvider.GetServices(behaviorType);
@@ -96,7 +96,7 @@ internal sealed class Dispatcher(IServiceProvider serviceProvider) : IDispatcher
     {
         ArgumentNullException.ThrowIfNull(notification);
         
-        var handlerType = ServiceCollectionExtensions.NotificationHandlerTypeCache.GetOrAdd(
+        var handlerType = ServiceCollectionExtensions._notificationHandlerTypeCache.GetOrAdd(
             notification.GetType(),
             static ct => typeof(INotificationHandler<>).MakeGenericType(ct));
 

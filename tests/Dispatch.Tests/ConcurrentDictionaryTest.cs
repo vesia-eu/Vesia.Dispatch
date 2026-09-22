@@ -22,7 +22,7 @@ public class ConcurrentDictionaryTest
     [Fact]
     public void AddDispatch_PopulatesCommandHandlerCache()
     {
-        var found = ServiceCollectionExtensions.CommandHandlerTypeCache
+        var found = ServiceCollectionExtensions._commandHandlerTypeCache
             .TryGetValue((typeof(TestCommand), typeof(string)), out var handlerType);
 
         Assert.True(found);
@@ -32,7 +32,7 @@ public class ConcurrentDictionaryTest
     [Fact]
     public void AddDispatch_PopulatesVoidHandlerCache()
     {
-        var found = ServiceCollectionExtensions.VoidHandlerTypeCache
+        var found = ServiceCollectionExtensions._voidHandlerTypeCache
             .TryGetValue(typeof(VoidCommand), out var handlerType);
 
         Assert.True(found);
@@ -42,7 +42,7 @@ public class ConcurrentDictionaryTest
     [Fact]
     public void AddDispatch_PopulatesQueryHandlerCache()
     {
-        var found = ServiceCollectionExtensions.QueryHandlerTypeCache
+        var found = ServiceCollectionExtensions._queryHandlerTypeCache
             .TryGetValue((typeof(TestQuery), typeof(string)), out var handlerType);
 
         Assert.True(found);
