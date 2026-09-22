@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Microsoft.Extensions.Logging;
 
 namespace Vesia.Dispatch;
@@ -10,15 +11,18 @@ internal sealed class CommandLoggingBehavior<TCommand, TResult>(ILogger<CommandL
     {
         logger.LogInformation("Handling command {Command}", typeof(TCommand).Name);
     
+        var sw = Stopwatch.StartNew();
         try
         {
             var result = await next();
-            logger.LogInformation("Handled command {Command}", typeof(TCommand).Name);
+            sw.Stop();
+            logger.LogInformation("Handled command {Command} in {Elapsed}ms", typeof(TCommand).Name, sw.ElapsedMilliseconds);
             return result;
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Error handling command {Command}", typeof(TCommand).Name);
+            sw.Stop();
+            logger.LogError(ex, "Error handling command {Command} after {Elapsed}ms", typeof(TCommand).Name, sw.ElapsedMilliseconds);
             throw;
         }
     }
@@ -31,15 +35,18 @@ internal class CommandLoggingBehavior<TCommand>(ILogger<CommandLoggingBehavior<T
     public async Task Handle(TCommand command, Func<Task> next, CancellationToken cancellationToken = default)
     {
         logger.LogInformation("Handling command {Command}", typeof(TCommand).Name);
-    
+
+        var sw = Stopwatch.StartNew();
         try
         {
             await next();
-            logger.LogInformation("Handled command {Command}", typeof(TCommand).Name);
+            sw.Stop();
+            logger.LogInformation("Handled command {Command} in {Elapsed}ms", typeof(TCommand).Name, sw.ElapsedMilliseconds);
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Error handling command {Command}", typeof(TCommand).Name);
+            sw.Stop();
+            logger.LogError(ex, "Error handling command {Command} after {Elapsed}ms", typeof(TCommand).Name, sw.ElapsedMilliseconds);
             throw;
         }
     }

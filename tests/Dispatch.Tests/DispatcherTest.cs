@@ -20,7 +20,6 @@ public class DispatcherTest
 
         _dispatcher = services.BuildServiceProvider().GetRequiredService<IDispatcher>();
     }
-
     
     [Fact]
     public async Task DispatchCommandTest()

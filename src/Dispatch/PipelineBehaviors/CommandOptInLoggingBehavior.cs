@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Reflection;
 using Microsoft.Extensions.Logging;
 
@@ -10,22 +11,25 @@ internal sealed class CommandOptInLoggingBehavior<TCommand, TResult>(ILogger<Com
     public async Task<TResult> Handle(TCommand command, Func<Task<TResult>> next, CancellationToken cancellationToken = default)
     {
         var shouldLog = typeof(TCommand).GetCustomAttribute<LoggedAttribute>() is not null;
-        
+
+        var sw = Stopwatch.StartNew();
         try
         {
             if (shouldLog)
                 logger.LogInformation("Handling command {Command}", typeof(TCommand).Name);
 
             var result = await next();
+            sw.Stop();
 
             if (shouldLog)
-                logger.LogInformation("Handled command {Command}", typeof(TCommand).Name);
+                logger.LogInformation("Handled command {Command} in {Elapsed}ms", typeof(TCommand).Name, sw.ElapsedMilliseconds);
 
             return result;
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Error handling command {Command}", typeof(TCommand).Name);
+            sw.Stop();
+            logger.LogError(ex, "Error handling command {Command} after {Elapsed}ms", typeof(TCommand).Name, sw.ElapsedMilliseconds);
             throw;
         }
     }
@@ -39,20 +43,23 @@ internal sealed class CommandOptInLoggingBehavior<TCommand>(ILogger<CommandOptIn
     {
         var shouldLog = typeof(TCommand).GetCustomAttribute<LoggedAttribute>() is not null;
         
+        var sw = Stopwatch.StartNew();
         try
         {
             if (shouldLog)
                 logger.LogInformation("Handling command {Command}", typeof(TCommand).Name);
 
             await next();
-
+            sw.Stop();
+            
             if (shouldLog)
-                logger.LogInformation("Handled command {Command}", typeof(TCommand).Name);
+                logger.LogInformation("Handled command {Command} in {Elapsed}ms", typeof(TCommand).Name, sw.ElapsedMilliseconds);
 
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Error handling command {Command}", typeof(TCommand).Name);
+            sw.Stop();
+            logger.LogError(ex, "Error handling command {Command} after {Elapsed}ms", typeof(TCommand).Name, sw.ElapsedMilliseconds);
             throw;
         }
     }

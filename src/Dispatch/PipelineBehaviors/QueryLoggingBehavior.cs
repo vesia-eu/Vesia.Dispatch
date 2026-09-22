@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Microsoft.Extensions.Logging;
 
 namespace Vesia.Dispatch;
@@ -8,16 +9,20 @@ internal sealed class QueryLoggingBehavior<TQuery, TResult>(ILogger<QueryLogging
 {
     public async Task<TResult> Handle(TQuery query, Func<Task<TResult>> next, CancellationToken cancellationToken = default)
     {
+        var sw = Stopwatch.StartNew();
+        
         try
         {
             logger.LogInformation("Handling query {Query}", typeof(TQuery).Name);
             var result = await next();
-            logger.LogInformation("Handled query {Query}", typeof(TQuery).Name);
+            sw.Stop();
+            logger.LogInformation("Handled query {Query} in {Elapsed}ms", typeof(TQuery).Name, sw.ElapsedMilliseconds);
             return result;
         }
         catch(Exception ex)
         {
-            logger.LogError(ex, "Error handling query {Query}", typeof(TQuery).Name);
+            sw.Stop();
+            logger.LogError(ex, "Error handling query {Query} after {Elapsed}ms", typeof(TQuery).Name, sw.ElapsedMilliseconds);
             throw;
         }
     }
