@@ -9,7 +9,7 @@
         
         <!-- NuGet metadata -->
         <PackageId>Vesia.Dispatch</PackageId>
-        <Version>0.3.1</Version>
+        <Version>0.3.2</Version>
         <Authors>Vesia</Authors>
         <Description>A free, open-source CQRS dispatcher for .NET with built-in command/query separation, pipeline behaviors, and notifications.</Description>
         <PackageTags>cqrs;mediator;dispatcher;clean-architecture;ddd</PackageTags>
